@@ -24,7 +24,10 @@ class Home extends Component {
         <form className="profile__form">
           <button onClick={this.simulateUpload} className="profile__simulator">
             <img
-              src="http://lorempixel.com/200/200" alt="name"
+              src="http://www.sheffield.com/wp-content/uploads/2013/06/placeholder.png"
+              alt="name"
+              height={150}
+              width={150}
               className="profile__picture"
             />
           </button>
@@ -43,7 +46,7 @@ class Home extends Component {
 
           <textarea
             ref={node => { this.description = node }}
-            placeholder="Why do you do sports in 140 chars."
+            placeholder="Why do you do sports."
             className="profile__description"
             onKeyUp={this.textAreaAdjust}
           />
