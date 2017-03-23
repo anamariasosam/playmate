@@ -7,6 +7,19 @@ class Home extends Component {
 
     this.textAreaAdjust = this.textAreaAdjust.bind(this)
     this.simulateUpload = this.simulateUpload.bind(this)
+    this.readURL = this.readURL.bind(this)
+  }
+
+  readURL(event) {
+    if (event.currentTarget.files && event.currentTarget.files[0]) {
+      const reader = new FileReader()
+
+      reader.onload = (e) => {
+        this.profilePicture.setAttribute('src', e.target.result)
+      }
+
+      reader.readAsDataURL(event.currentTarget.files[0])
+    }
   }
 
   simulateUpload() {
@@ -22,17 +35,24 @@ class Home extends Component {
     return (
       <div>
         <form className="profile__form">
-          <button onClick={this.simulateUpload} className="profile__simulator">
+          <label htmlFor="file">
             <img
               src="http://www.sheffield.com/wp-content/uploads/2013/06/placeholder.png"
               alt="name"
               height={150}
               width={150}
               className="profile__picture"
+              ref={node => { this.profilePicture = node }}
             />
-          </button>
+            <input
+              type="file"
+              id="file"
+              ref={node => { this.file = node }}
+              hidden
+              onChange={this.readURL}
+            />
+          </label>
 
-          <input type="file" ref={node => { this.file = node }} hidden />
           <br />
 
           <input
