@@ -4,13 +4,22 @@
 
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-class Hello extends Component {
+import Home from './components/Home'
+
+class App extends Component {
   render() {
-    return <div>Hello {this.props.name}!</div>
+    return (
+      <Router>
+        <div>
+          <Route exact path="/" component={Home} />
+        </div>
+      </Router>
+    )
   }
 }
 
-document.addEventListener("DOMContentLoaded", e => {
-  ReactDOM.render(<Hello name="React" />, document.getElementById('root'))
+document.addEventListener('DOMContentLoaded', () => {
+  ReactDOM.render(<App />, document.getElementById('root'))
 })
