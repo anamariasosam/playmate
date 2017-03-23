@@ -2,10 +2,10 @@
 // like app/views/layouts/application.html.erb. All it does is render <div>Hello React</div> at the bottom
 // of the page.
 
-import React from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-class Hello extends React.Component {
+class Hello extends Component {
   render() {
     return <div>Hello {this.props.name}!</div>
   }
