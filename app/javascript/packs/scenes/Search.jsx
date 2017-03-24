@@ -80,7 +80,7 @@ class Search extends Component {
       superagent
         .post('/api/workouts')
         .query({
-          user_id: Number(userId) - 1,
+          user_id: Number(userId),
           sport_id: SPORTS.indexOf(event.currentTarget.value) + 1,
         })
         .end((err, res) => {
@@ -91,7 +91,13 @@ class Search extends Component {
     }
 
     if (userId && !event.currentTarget.checked) {
-      // delete sport
+      // superagent
+      //   .del('/api/workouts')
+      //   .query({ id: workoutId})
+      //   .end(function(err, res){
+      //     console.log(res.body);
+      //     done();
+      //   });
     }
   }
 
