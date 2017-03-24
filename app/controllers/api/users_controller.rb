@@ -30,7 +30,6 @@ class Api::UsersController < ApplicationController
 
     if @user.save
       session[:current_user_id] = @user.id
-      puts "Holaa 😘😘😘😘 #{session[:current_user_id]}"
       render json: @user, status: :created
     else
       render json: @user.errors, status: :unprocessable_entity
