@@ -1,10 +1,18 @@
 import React, { Component } from 'react'
-import { BrowserHistory } from 'react-router-dom'
+import superagent from 'superagent'
+
+import { LOCAL_KEY } from '../constants'
 
 class Start extends Component {
 
   constructor() {
     super()
+
+    this.state = {
+      name: '',
+      description: '',
+      picture: '',
+    }
 
     this.textAreaAdjust = this.textAreaAdjust.bind(this)
     this.simulateUpload = this.simulateUpload.bind(this)
@@ -12,11 +20,26 @@ class Start extends Component {
     this.readURL = this.readURL.bind(this)
   }
 
+  componentWillMount() {
+    const {
+      userId = null,
+      name = '',
+      description = '',
+    } = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {}
+
+    if (userId) {
+      this.setState({
+        name,
+        description,
+      })
+    }
+  }
+
   readURL(event) {
     if (event.currentTarget.files && event.currentTarget.files[0]) {
       const reader = new FileReader()
 
-      reader.onload = (e) => {
+      reader.onload = e => {
         this.profilePicture.setAttribute('src', e.target.result)
       }
 
@@ -31,7 +54,27 @@ class Start extends Component {
   submitProfile(event) {
     event.preventDefault()
 
-    this.props.history.push('/search')
+    superagent
+      .post('/api/users')
+      .query({
+        name: this.state.name,
+        description: this.state.description,
+      })
+      .end((err, res) => {
+        if (err) { return }
+
+        console.log('res', res.body);
+
+        const save = JSON.stringify({
+          userId: res.body.id,
+          name: res.body.name,
+          description: res.body.description,
+        })
+
+        localStorage.setItem(LOCAL_KEY, save)
+
+        this.props.history.push('/search')
+      })
   }
 
   textAreaAdjust() {
@@ -68,7 +111,8 @@ class Start extends Component {
             ref={node => { this.name = node }}
             placeholder="Name"
             className="profile__name"
-            rows={1}
+            value={this.state.name}
+            onChange={event => this.setState({ name: event.target.value })}
           />
           <br />
 
@@ -77,6 +121,8 @@ class Start extends Component {
             placeholder="Why do you do sports."
             className="profile__description"
             onKeyUp={this.textAreaAdjust}
+            value={this.state.description}
+            onChange={event => this.setState({ description: event.target.value })}
           />
           <br />
 
