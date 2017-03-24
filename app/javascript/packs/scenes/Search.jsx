@@ -19,7 +19,7 @@ const CheckBox = props => {
   )
 }
 
-class Home extends Component {
+class Search extends Component {
 
   constructor() {
     super()
@@ -93,4 +93,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default Search
