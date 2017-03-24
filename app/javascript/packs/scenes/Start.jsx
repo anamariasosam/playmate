@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { BrowserHistory } from 'react-router-dom'
 
 class Start extends Component {
 
@@ -7,6 +8,7 @@ class Start extends Component {
 
     this.textAreaAdjust = this.textAreaAdjust.bind(this)
     this.simulateUpload = this.simulateUpload.bind(this)
+    this.submitProfile = this.submitProfile.bind(this)
     this.readURL = this.readURL.bind(this)
   }
 
@@ -26,6 +28,12 @@ class Start extends Component {
     this.file.click()
   }
 
+  submitProfile(event) {
+    event.preventDefault()
+
+    this.props.history.push('/search')
+  }
+
   textAreaAdjust() {
     this.description.style.height = '1px'
     this.description.style.height = `${15 + this.description.scrollHeight}px`
@@ -34,7 +42,7 @@ class Start extends Component {
   render() {
     return (
       <div>
-        <form className="profile__form">
+        <form className="profile__form" onSubmit={this.submitProfile}>
           <label htmlFor="file">
             <img
               src="http://www.sheffield.com/wp-content/uploads/2013/06/placeholder.png"
