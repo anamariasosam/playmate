@@ -59,7 +59,13 @@ class Api::UsersController < ApplicationController
 
   def nearby
     @user = User.find(params[:id])
-    @users_nearby = @user.nearbys(5)
+    @sports_ids =  @user.workouts.map(&:id).join(",")
+    @users_nearby = @user.nearbys
+
+    @users_nearby = @users_nearby
+                      .joins(:workouts)
+                      .where("sport_id in ( #{@sports_ids} )")
+
     render json: @users_nearby
   end
 
