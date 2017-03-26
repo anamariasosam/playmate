@@ -10,6 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 20170325222521) do
 
   # These are extensions that must be enabled in order to support this database
@@ -22,6 +23,9 @@ ActiveRecord::Schema.define(version: 20170325222521) do
     t.datetime "updated_at", null: false
     t.string "picture"
     t.text "sports", default: [], array: true
+    t.float "latitude"
+    t.float "longitude"
+    t.string "address"
   end
 
 end
