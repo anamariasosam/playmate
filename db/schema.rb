@@ -10,16 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170324043255) do
+ActiveRecord::Schema.define(version: 20170325222521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "sports", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -27,17 +21,7 @@ ActiveRecord::Schema.define(version: 20170324043255) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "picture"
+    t.text "sports", default: [], array: true
   end
 
-  create_table "workouts", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "sport_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["sport_id"], name: "index_workouts_on_sport_id"
-    t.index ["user_id"], name: "index_workouts_on_user_id"
-  end
-
-  add_foreign_key "workouts", "sports"
-  add_foreign_key "workouts", "users"
 end
