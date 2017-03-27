@@ -65,7 +65,7 @@ class Api::UsersController < ApplicationController
     users_nearby.each do |user|
       sports = sports_names & user.sports
       if !(sports).empty?
-        @playmates  << {:id => user.id, :name => user.name, :sport  => sports}
+        @playmates  << {:id => user.id, :name => user.name, :sport  => sports, :image => user.picture.url}
       end
     end
 

@@ -36,15 +36,16 @@ class Start extends Component {
   }
 
   readURL(event) {
-    if (event.currentTarget.files && event.currentTarget.files[0]) {
-      const reader = new FileReader()
+    const input = event.target;
+    const reader = new FileReader();
 
-      reader.onload = e => {
-        this.profilePicture.setAttribute('src', e.target.result)
-      }
+    reader.onload = e => {
+      this.profilePicture.setAttribute('src', reader.result);
 
-      reader.readAsDataURL(event.currentTarget.files[0])
+      this.setState({picture: input.files[0] })
     }
+
+    reader.readAsDataURL(input.files[0]);
   }
 
   simulateUpload() {
@@ -52,29 +53,30 @@ class Start extends Component {
   }
 
   submitProfile(event) {
-    event.preventDefault()
+    event.preventDefault();
 
     superagent
-      .post('/api/users')
+      .post('/api/users/')
       .query({
         name: this.state.name,
-        description: this.state.description,
-      })
+        description: this.state.description
+        })
+      .attach('picture', this.state.picture)
       .end((err, res) => {
-        if (err) { return }
-
-        console.log('res', res.body);
+        if (err) console.log(err);
 
         const save = JSON.stringify({
           userId: res.body.id,
           name: res.body.name,
           description: res.body.description,
+          picture: res.body.picture.url,
         })
 
         localStorage.setItem(LOCAL_KEY, save)
 
         this.props.history.push('/search')
-      })
+      });
+
   }
 
   textAreaAdjust() {
