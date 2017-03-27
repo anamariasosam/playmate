@@ -40,7 +40,7 @@ class Api::UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.json { render :show, status: :ok }
+        format.json { render json: @user, status: :ok }
       else
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
@@ -56,16 +56,20 @@ class Api::UsersController < ApplicationController
     end
   end
 
-  def nearby
-    @user = User.find(params[:id])
-    @sports_ids =  @user.workouts.map(&:id).join(",")
-    @users_nearby = @user.nearbys
+  def playmates
+    user = User.find(params[:id])
+    sports_names =  user.sports
+    users_nearby = user.nearbys
 
-    @users_nearby = @users_nearby
-                      .joins(:workouts)
-                      .where("sport_id in ( #{@sports_ids} )")
+    @playmates = []
+    users_nearby.each do |user|
+      sports = sports_names & user.sports
+      if !(sports).empty?
+        @playmates  << {:id => user.id, :name => user.name, :sport  => sports}
+      end
+    end
 
-    render json: @users_nearby
+    render json: @playmates.to_json
   end
 
   private
@@ -76,6 +80,6 @@ class Api::UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.permit(:name, :description, :picture, :latitude, :longitude,  :sports)
+      params.permit(:name, :description, :picture, :latitude, :longitude, sports: [])
     end
 end
