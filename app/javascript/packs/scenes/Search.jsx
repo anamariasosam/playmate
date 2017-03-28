@@ -1,23 +1,12 @@
 import React, { Component } from 'react'
 import superagent from 'superagent'
+import RaisedButton from 'material-ui/RaisedButton'
+import Snackbar from 'material-ui/Snackbar'
+import Checkbox from 'material-ui/Checkbox'
+import ActionFavorite from 'material-ui/svg-icons/action/favorite'
+import ActionFavoriteBorder from 'material-ui/svg-icons/action/favorite-border'
 
 import { LOCAL_KEY, SPORTS } from '../constants'
-
-const CheckBox = props => {
-  return (
-    <label className="search__check" htmlFor={`check_${props.name}`}>
-      <input
-        type="checkbox"
-        hidden
-        onChange={props.onChange}
-        value={props.name}
-        id={`check_${props.name}`}
-        checked={props.checked}
-      />
-      <span className="search__checktext">{props.name}</span>
-    </label>
-  )
-}
 
 class Search extends Component {
 
@@ -28,6 +17,7 @@ class Search extends Component {
       searchState: 'Check the sports you practice and hit search',
       playmates: [],
       sports: [],
+      openSnackbar: true,
     }
 
     this.submitSearch = this.submitSearch.bind(this)
@@ -55,6 +45,7 @@ class Search extends Component {
   submitSearch(event) {
     event.preventDefault();
     this.setState({
+      openSnackbar: true,
       searchState: 'Finding your location...',
     })
 
@@ -77,7 +68,10 @@ class Search extends Component {
        .end((err, res) => {
          if (err) { alert('Sorry, something went wrong'); }
 
-         this.setState({ searchState: 'Now lets find your playmates...'});
+         this.setState({
+           openSnackbar: true,
+           searchState: 'Now lets find your playmates...',
+         });
 
          superagent
           .get(`/api/users/playmates/${userId}`)
@@ -86,10 +80,14 @@ class Search extends Component {
              const playmates = res.body;
 
              if (!playmates.length) {
-               this.setState({ searchState: 'No playmates!!'});
+               this.setState({
+                 openSnackbar: true,
+                 searchState: 'No playmates founded'
+               });
              } else {
                this.setState({
-                 searchState: 'We have found some playmates!!',
+                 openSnackbar: true,
+                 searchState: 'We have found some playmates',
                  playmates
                });
              }
@@ -101,6 +99,7 @@ class Search extends Component {
       navigator.geolocation.watchPosition(showPosition.bind(this), this.errorOnGeo);
     } else {
       this.setState({
+        openSnackbar: true,
         searchState: 'Allow our site to get your current location ',
       })
     }
@@ -126,13 +125,13 @@ class Search extends Component {
       default:
     }
 
-    this.setState({ searchState: message })
+    this.setState({ openSnackbar: true, searchState: message })
   }
 
   handleCheckbox(event) {
     let sports = [];
     let value = event.currentTarget.value.toLowerCase();
-    
+
     if (event.currentTarget.checked) {
       sports = this.state.sports.slice();
       sports.push(value);
@@ -150,8 +149,32 @@ class Search extends Component {
           <h2 className="search__title">Search</h2>
         </header>
 
-        <div className="content">
-          <h3>{this.state.searchState}</h3>
+        <form className="search__form" onSubmit={this.submitSearch}>
+          <div>
+            { SPORTS.map( sport => {
+                const checked = this.state.sports.indexOf(sport) > -1;
+
+                return (
+                  <Checkbox
+                    checkedIcon={<ActionFavorite />}
+                    uncheckedIcon={<ActionFavoriteBorder />}
+                    label={sport}
+                    key={sport}
+                    value={sport}
+                    onCheck={this.handleCheckbox}
+                    defaultChecked={checked}
+                    className="search__checkbox"
+                  />
+                )
+              })
+            }
+          </div>
+
+          <br />
+          <RaisedButton label="Search playmates" fullWidth={true} type="submit"/>
+        </form>
+
+        <div className="playmates">
           { !!this.state.playmates.length &&
              this.state.playmates.map( playmate => {
                return (
@@ -161,23 +184,12 @@ class Search extends Component {
           }
         </div>
 
-        <form className="search__form" onSubmit={this.submitSearch}>
-
-          <div className="search__checks">
-            { SPORTS.map( sport => {
-                const checked = this.state.sports.indexOf(sport) > -1;
-
-                return (
-                  <CheckBox name={sport} key={sport} onChange={this.handleCheckbox} checked={checked} />
-                )
-
-              })
-            }
-          </div>
-
-          <br />
-          <button className="search__submit">Search Sportsmate</button>
-        </form>
+        <Snackbar
+          open={this.state.openSnackbar}
+          message={this.state.searchState}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     )
   }

@@ -3,49 +3,19 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .search {
-  background-image: url(https://d13yacurqjgara.cloudfront.net/users/950779/screenshots/2961711/whrevr_new-01.jpg);
   background-size: 200vw;
   display: flex;
   justify-content: space-between;
   flex-flow: column;
-  height: 100vh;
+  margin: 25px;
 
-  &__check {
-    align-items: center;
-    background-color: #2c325d;
-    height: 75px;
-    width: calc(100% / 4);
-    display: flex;
-    justify-content: center;
+
+  &__checkbox {
     text-transform: capitalize;
-  }
-
-  &__checks {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__checktext {
-    color: #fff;
-    font-size: 16px;
-    *:checked + &{
-      background-color: #fff;
-      color: #000;
-    }
+    margin-bottom: 20px;
   }
 
   &__submit {
-    background: #4dd166;
-    border-color: darken(#4dd166, 10%);
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 0px;
-    display: block;
-    font-size: 16px;
-    color: white;
-    font-weight: bold;
-    padding: 20px 30px;
-    width: 70%;
     margin: auto;
     margin-bottom: 50px;
   }
