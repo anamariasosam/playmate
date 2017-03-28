@@ -3,32 +3,20 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body {
+  background: #303030;
   background: -moz-linear-gradient(top, #33383f 0%, #1e242b 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(top, #33383f 0%,#1e242b 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #33383f 0%,#1e242b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
   min-height: 100vh;
 
+  font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
 }
 
 .profile {
-
-  &__description {
-    background: transparent;
-    border: 0;
-    border-bottom: 2px solid #4dd166;
-    border-radius: 0;
-    color: #fff;
-    margin-bottom: 10%;
-    width: 75vw;
-    font-size: 16px;
-
-    &:focus {
-      outline: 0;
-    }
-  }
+  margin: 45px;
 
   &__form {
     padding-top: 10%;
@@ -36,39 +24,22 @@ body {
     width: 100%;
   }
 
-  &__name {
-    background: transparent;
-    border: 0;
-    border-bottom: 2px solid #4dd166;
-    border-radius: 0;
-    color: #fff;
-    height: 30px;
-    margin-bottom: 10%;
-    margin-top: 10%;
-    width: 75vw;
-    font-size: 16px;
-
-    &:focus {
-      outline: 0;
-    }
+  &__description {
+    text-align: left;
   }
 
   &__picture {
     border-radius: 50%;
     width: 150px;
+  } 
+
+  &__name {
+    color: #fff;
+    margin-bottom: 10%;
+    margin-top: 10%;
   }
 
   &__submit {
-    background: -moz-linear-gradient(top, #33383f 0%, #1e242b 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #33383f 0%,#1e242b 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #33383f 0%,#1e242b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-
-    border-color: #4dd166;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 20px;
-    color: #4dd166;
-    font-weight: bold;
-    padding: 10px 30px;
-  }
+   margin-top: 10%;
+ }
 }

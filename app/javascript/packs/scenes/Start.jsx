@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import superagent from 'superagent'
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import { LOCAL_KEY } from '../constants'
 
@@ -86,16 +88,16 @@ class Start extends Component {
 
   render() {
     return (
-      <div>
+      <div className="profile">
         <form className="profile__form" onSubmit={this.submitProfile}>
           <label htmlFor="file">
             <img
-              src="http://www.sheffield.com/wp-content/uploads/2013/06/placeholder.png"
-              alt="name"
+              src="/uploads/user/picture/41/AGILE-Graphic01.png"
+              alt="picture placeholder"
               height={150}
               width={150}
-              className="profile__picture"
               ref={node => { this.profilePicture = node }}
+              className="profile__picture"
             />
             <input
               type="file"
@@ -108,27 +110,40 @@ class Start extends Component {
 
           <br />
 
-          <input
-            type="text"
+          <TextField
+            hintText="Name"
+            floatingLabelText="Name"
             ref={node => { this.name = node }}
-            placeholder="Name"
-            className="profile__name"
             value={this.state.name}
             onChange={event => this.setState({ name: event.target.value })}
+            className="profile__name"
+            fullWidth={true}
           />
+
           <br />
 
-          <textarea
+          <TextField
+            hintText="Why do you do sports"
+            floatingLabelText="Why do you do sports"
+            multiLine={true}
+            rows={2}
+            rowsMax={4}
             ref={node => { this.description = node }}
-            placeholder="Why do you do sports."
             className="profile__description"
             onKeyUp={this.textAreaAdjust}
             value={this.state.description}
             onChange={event => this.setState({ description: event.target.value })}
+            fullWidth={true}
           />
+
           <br />
 
-          <button className="profile__submit">Check Sports</button>
+          <RaisedButton
+            label="Check Sports"
+            className="profile__submit"
+            fullWidth={true}
+            type="submit"
+          />
         </form>
       </div>
     )
