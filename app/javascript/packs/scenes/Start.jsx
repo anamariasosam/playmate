@@ -84,7 +84,7 @@ class Start extends Component {
 
   render() {
     return (
-      <div>
+      <div className="profile">
         <form className="profile__form" onSubmit={this.submitProfile}>
           <label htmlFor="file">
             <img

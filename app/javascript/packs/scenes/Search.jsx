@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import superagent from 'superagent'
 
-import { LOCAL_KEY, SPORTS } from '../constants'
+import { LOCAL_KEY, SPORTS, SPORTSSVG } from '../constants'
 
 const CheckBox = props => {
   return (
@@ -14,6 +14,7 @@ const CheckBox = props => {
         id={`check_${props.name}`}
         checked={props.checked}
       />
+      <span className="search__icon" dangerouslySetInnerHTML={{ __html: SPORTSSVG[props.name] }} />
       <span className="search__checktext">{props.name}</span>
     </label>
   )
@@ -23,17 +24,17 @@ class Search extends Component {
 
   constructor() {
     super()
-    const { userId = null } = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
+    const { userId = null } = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {}
 
     this.state = {
       searchState: 'Check the sports you practice and hit search',
-      sporst: [],
+      sports: [],
     }
 
     superagent
     .get(`/api/users/${userId}`)
     .end((err, res) => {
-      if (err) { alert('Sorry, something went wrong'); }
+      if (err) { alert('Sorry, something went wrong') }
 
       this.setState({ sports: res.body.sports})
     })
@@ -44,19 +45,19 @@ class Search extends Component {
   }
 
   submitSearch(event) {
-    event.preventDefault();
+    event.preventDefault()
     this.setState({
       searchState: 'Finding your location...',
     })
 
-    const { userId = null } = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {};
+    const { userId = null } = JSON.parse(localStorage.getItem(LOCAL_KEY)) || {}
 
 
     function showPosition(position) {
-      let crd = position.coords;
-      let sports = this.state.sports;
-      let latitude = crd.latitude;
-      let longitude = crd.longitude;
+      let crd = position.coords
+      let sports = this.state.sports
+      let latitude = crd.latitude
+      let longitude = crd.longitude
 
       superagent
        .put(`/api/users/${userId}`)
@@ -66,21 +67,21 @@ class Search extends Component {
          longitude
         })
        .end((err, res) => {
-         if (err) { alert('Sorry, something went wrong'); }
+         if (err) { alert('Sorry, something went wrong') }
 
-         this.setState({ searchState: '👯 now lets find your playmates...'});
+         this.setState({ searchState: '👯 now lets find your playmates...'})
          superagent
           .get(`/api/users/nearby/${userId}`)
           .end((err, res) => {
-             if (err) { alert('Sorry, something went wrong'); }
+             if (err) { alert('Sorry, something went wrong') }
 
-             console.log(JSON.stringify(res.body));
+             console.log(JSON.stringify(res.body))
            })
        })
     }
 
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(showPosition.bind(this), this.errorOnGeo);
+      navigator.geolocation.watchPosition(showPosition.bind(this), this.errorOnGeo)
     } else {
       this.setState({
         searchState: 'Allow our site to get your current location ',
@@ -112,36 +113,22 @@ class Search extends Component {
   }
 
   handleCheckbox(event) {
-    let sports = [];
+    let sports = []
+
     if (event.currentTarget.checked) {
-      sports = this.state.sports.slice();
-      sports.push(event.currentTarget.value.toLowerCase());
+      sports = this.state.sports.slice()
+      sports.push(event.currentTarget.value.toLowerCase())
     }
 
     if (!event.currentTarget.checked) {
-      let value = event.currentTarget.value.toLowerCase();
-      sports = this.state.sports.filter(item => item !== value);
+      let value = event.currentTarget.value.toLowerCase()
+      sports = this.state.sports.filter(item => item !== value)
     }
 
-    this.setState({ sports: sports })
+    this.setState({ sports })
   }
 
   render() {
-    const sportItems = SPORTS.map( (sport) => {
-      if (this.state.sports != undefined) {
-        if (this.state.sports.includes(sport.toLowerCase())) {
-          return(
-            <CheckBox name={sport} key={sport} onChange={this.handleCheckbox} checked={'checked'} />
-          )
-        }
-        else {
-          return(
-            <CheckBox name={sport} key={sport} onChange={this.handleCheckbox} />
-          )
-        }
-      }
-    });
-
     return (
       <div className="search">
         <header>
@@ -152,7 +139,18 @@ class Search extends Component {
         <form className="search__form" onSubmit={this.submitSearch}>
 
           <div className="search__checks">
-            {sportItems}
+            {SPORTS.map(sport => {
+              const checked = this.state.sports.indexOf(sport) > -1
+
+              return (
+                <CheckBox
+                  checked={checked}
+                  key={sport}
+                  name={sport}
+                  onChange={this.handleCheckbox}
+                />
+              )
+            })}
           </div>
 
           <br />
